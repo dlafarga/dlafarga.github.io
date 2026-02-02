@@ -10,6 +10,6 @@ title: About me and this site
 
 <p>When I'm not coding or analyzing ocean temperatures, you'll find me twirling fire poi, rock climbing, at my piano, or crafting elaborate cosplay costumes. I believe the same creativity I use in life goes into building good algorithms.</p>
   
-<p> Feel free to explore my projects in the <a href="[url](https://dlafarga.github.io/menu/writing.html)">tutorials.</a> </p>
+<p> Feel free to explore my projects in the <a href="[url](https://dlafarga.github.io/menu/writing.html)">projects.</a> </p>
 
 
