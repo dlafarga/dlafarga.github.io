@@ -146,14 +146,10 @@ hr {
 }
 
 .thumbnail-container img{
-  width: 100%;
-  height: auto;
-  display: block;
-}
-/*
   margin-top: -11.5%;
   margin-bottom: -11.5%;
-*/
+}
+
 /*
   Post
 */
