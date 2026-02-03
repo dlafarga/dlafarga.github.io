@@ -140,16 +140,22 @@ hr {
 
 .thumbnail-container {
   max-width: 100%;
+  height: 300px; /* Adjust as needed and added*/
   overflow: hidden;
   border-radius: 5px;
   margin-bottom: 25px;
 }
 
 .thumbnail-container img{
+  width: 100%;
+  height: auto;
+  object-fit: cover; /* Crops image nicely */
+  display: block;
+}
+/*
   margin-top: -11.5%;
   margin-bottom: -11.5%;
-}
-
+*/
 /*
   Post
 */
