@@ -20,15 +20,14 @@ Heres some of the nitty gritty info for the example data used in this visualizat
 The ocean temperature in this study is from the global ocean physics reanalysis (GLORYS), a high-resolution  ($1/12^{\circ}$ by $1/12^{\circ}$) data assimilative global ocean simulation available from the Copernicus Marine Environment Monitoring Service. It has a spatial resolution of $1/12^{\circ}$ latitude by $1/12^{\circ}$ longitude with 50 depth layers covering the entire global ocean from $80^{\circ}$S to $90^{\circ}$N and $180^{\circ}$E to 180$^{\circ}$W, extending from the ocean surface to 5,727 meters.
 
 **Table 1:** The depth values of the 50 layers in the GLORYS model (unit: meters). Values were rounded to the first two decimal places.
-| | | | | |
-|------:|------:|------:|------:|------:|
-| 0.49 | 1.54 | 2.65 | 3.82 | 5.08 |
-| 6.44 | 7.93 | 9.57 | 11.41 | 13.47 |
-| 15.81 | 18.50 | 21.60 | 25.21 | 29.44 |
-| 34.43 | 40.34 | 47.37 | 55.76 | 65.81 |
-| 77.85 | 92.33 | 109.73 | 130.67 | 155.85 |
-| 186.13 | 222.51 | 266.04 | 318.13 | 380.21 |
-| 453.94 | 541.09 | 643.57 | 763.33 | 902.34 |
+
+|   0.49  |   1.54  |   2.65  |   3.82  |  5.08   |
+|   6.44  |   7.93  |   9.57  |  11.41  |  13.47  |
+|  15.81  |  18.50  |  21.60  |  25.21  |  29.44  |
+|  34.43  |  40.34  |  47.37  |  55.76  |  65.81  |
+|  77.85  |  92.33  |  109.73 |  130.67 |  155.85 |
+|  186.13 |  222.51 |  266.04 |  318.13 |  380.21 |
+|  453.94 |  541.09 |  643.57 |  763.33 |  902.34 |
 | 1062.44 | 1245.29 | 1452.25 | 1684.28 | 1941.89 |
 | 2225.08 | 2533.34 | 2865.70 | 3220.82 | 3597.03 |
 | 3992.48 | 4405.22 | 4833.29 | 5274.78 | 5727.92 |
