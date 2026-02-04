@@ -471,9 +471,9 @@ cbar.ax.tick_params(labelsize=label_sz)    # set label size of ticks
 cbar.formatter.set_powerlimits((0, 0))     # formatting scientific notation
 cbar.update_ticks()
 ```
-![depth]({{ site.url }}/assets/img/post4/depth_cross.png){: .center-image }
+![depth]({{ site.url }}/assets/img/post4/zonal_cross.png){: .center-image }
 
-<center>Figure 1: Zonal cross-section at the equator for the Pacific.</center>
+<center>Figure 2: Zonal cross-section at the equator for the Pacific.</center>
 
 # Visualizing one meridional cross-section
 We use the same main function with a few changes to do a zonal cross-section.
@@ -584,7 +584,7 @@ cbar.update_ticks()
 
 ![depth]({{ site.url }}/assets/img/post4/merd_cross.png){: .center-image }
 
-<center>Figure 1: Meridional cross-section at 160E in the North Pacific.</center>
+<center>Figure 3: Meridional cross-section at 160E in the North Pacific.</center>
 
 # All cross-section plotted as cube
 
@@ -760,9 +760,9 @@ cbar.update_ticks()
 
 ```
 
-![depth]({{ site.url }}/assets/img/post4/3D_cube_cross.png){: .center-image }
+![depth]({{ site.url }}/assets/img/post4/3D_cube.png){: .center-image }
 
-<center>Figure 1: North Pacific with a depth, zonal, and meridional cross-section.</center>
+<center>Figure 4: North Pacific with a depth, zonal, and meridional cross-section.</center>
 
 # Making an animation of zonal cross-sections
 Though the cross-sections are great, sometimes they are hard to understand and intuiatively place their location. For example, the meridional cut is tough to understand on its own, but once placed on a cube we can better imagine its location. 
@@ -946,4 +946,4 @@ for file in frame_files:
 print(f"{output_path} created!")
 ```
 This animation shows multiple zonal cross-sections going up the California coast for EOF 1. Using this you can observe  how ENSO cases warm anomalies on the California coast and how changes as it moves north.
-<img src="https://raw.githubusercontent.com/dlafarga/3D-Visualization-Tutorial-using-GLORYS/main/EOF1_animation.gif" width="50%">
+<img src="https://raw.githubusercontent.com/dlafarga/3D-Visualization-Tutorial-using-GLORYS/main/EOF1_animation.gif" width="80%">
