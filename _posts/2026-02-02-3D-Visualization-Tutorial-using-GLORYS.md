@@ -19,8 +19,7 @@ Heres some of the nitty gritty info for the example data used in this visualizat
 
 The ocean temperature in this study is from the global ocean physics reanalysis (GLORYS), a high-resolution  ($1/12^{\circ}$ by $1/12^{\circ}$) data assimilative global ocean simulation available from the Copernicus Marine Environment Monitoring Service. It has a spatial resolution of $1/12^{\circ}$ latitude by $1/12^{\circ}$ longitude with 50 depth layers covering the entire global ocean from $80^{\circ}$S to $90^{\circ}$N and $180^{\circ}$E to 180$^{\circ}$W, extending from the ocean surface to 5,727 meters.
 
-<div align="center">
-
+**Table 1:** The depth values of the 50 layers in the GLORYS model (unit: meters). Values were rounded to the first two decimal places.
 | | | | | |
 |------:|------:|------:|------:|------:|
 | 0.49 | 1.54 | 2.65 | 3.82 | 5.08 |
@@ -33,10 +32,6 @@ The ocean temperature in this study is from the global ocean physics reanalysis 
 | 1062.44 | 1245.29 | 1452.25 | 1684.28 | 1941.89 |
 | 2225.08 | 2533.34 | 2865.70 | 3220.82 | 3597.03 |
 | 3992.48 | 4405.22 | 4833.29 | 5274.78 | 5727.92 |
-
-<em>Table 1: The depth values of the 50 layers in the GLORYS model (unit: meters). Values were rounded to the first two decimal places.</em>
-
-</div>
 
 The resulting EOFs are calculated for all dimensions (i.e. 3D EOFs) using a December-January-February (DJF) boreal winter mean of GLORYS ocean temperature data from 1993/1994 to 2020/2021. We use the [temporal covariance method](https://dlafarga.github.io/journal/Covarianceintime.html). To further consider computational memory cost, the matrix multiplication required for calculating temporal covariance and 3D EOFs are performed using a partitioned approach. For temporal covariance, partitioned segments of the transposed anomaly matrix are sequentially read in and multiplied by corresponding partitioned segments of the anomaly matrix until the full multiplication is complete. Similarly, 3D EOFs are calculated by multiplying partitioned segments of the anomaly matrix with the eigenvectors of the temporal covariance matrix.
 
