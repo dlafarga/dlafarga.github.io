@@ -1,6 +1,6 @@
 ---
 layout: post
-title: "A tutorial for visualizing climate data in 3D"
+title: "A tutorial for 3D visualization of high-resolution climate data"
 author: "Dani Lafarga"
 categories: journal
 tags: [documentation,sample]
@@ -8,7 +8,11 @@ image: /post4/3D_cube.png
 ---
 
 # Motivation
-My previous 3D visualizations used Plotly, which was convenient and interactive, but it was limited in the amount of data it could visualize. For [my previous project](https://dlafarga.github.io/journal/CodeToplotfigures.html), this was not an issue as the data was small.
+My previous 3D visualizations used Plotly, which was convenient and interactive, but it was limited in the amount of data it could visualize. For [my previous project](https://dlafarga.github.io/journal/Covarianceintime.html), this was not an issue as the data was small.
+
+![3D OGCM]({{ site.url }}/assets/img/post1/Jan_clim.png){: .center-image }
+
+<center> Multiple depths plotted for January climatology from OGCM.</center>
 
 Once I started working with larger data, I found I was only able to plot one altitude layer of high-resolution data before crashing. This is when I turned to Python's Matplotlib library and its 3D projection. It took a lot less memory to create a figure, and it generated figures faster. Though I lost out on the interactive aspect (rotating, zooming in and out, etc.) I was still able to perform these tasks manually. 
 
@@ -221,7 +225,7 @@ lat, lon, depths = get_var(fn) # read variables
 EOF1 = read_EOFs(fn) # read EOF 1
   ```
 
-## Some notes befor we get into plotting each cross-section
+## Some notes before we get into plotting each cross-section
 There are is one main function that does most of the plotting. You can find the documentation of the function at https://matplotlib.org/stable/gallery/mplot3d/box3d.html.
 
 For each of these plots assume:
@@ -229,7 +233,7 @@ For each of these plots assume:
 - Y-axis is latitude
 - Z-axis is depth
 
-We define the variables **X, Y,** and **Z** as 3D arrays with their respective values that are cut down to a specific range. To do this we use the function meshgrid with the order longitude, latitude, and depth. The meshgrid is built from cut dimensions to focus on the North Pacific.
+We define the variables **X, Y,** and **Z** as 3D arrays with their respective values that are cut down to a specific range. To do this we use the function meshgrid with the order longitude, latitude, and depth. The meshgrid is built from cut dimensions to focus on a specific region.
 
 # Visualizing one depth cross-section
 
@@ -297,10 +301,11 @@ levels = 50                                 # set how many colors you want to pl
 # Contour Norms
 norm = mpl.colors.Normalize(vmin=vmin, vmax=vmax)
 #############################################################################
-# plot the top of the box
+# plot the surface depth cross-section
 # offset will place the cross-section in the right position on the Z axis
 cs2 = ax.contourf(X[:, :, 0], Y[:, :, 0], surface3D, zdir='z', offset=-depths[0],
                   levels=levels, cmap=newcmp2, norm=norm,vmin=vmin, vmax=vmax)
+#############################################################################
 # plotting land as black
 mask = np.isnan(surface3D)                                                 # create a mask for the NaN values
 masked_array = np.where(mask, surface3D, np.nan)                           # change points with values to NaN
@@ -357,7 +362,7 @@ cbar.update_ticks()
 
 ![depth]({{ site.url }}/assets/img/post4/depth_cross.png){: .center-image }
 
-<center>Figure 1: Depth cross-section at the surface for the North Pacific.</center>
+<center>Depth cross-section at the surface for the North Pacific.</center>
 
 # Visualizing one zonal cross-section
 We use the same main function with a few changes to do a zonal cross-section.
@@ -413,6 +418,7 @@ norm = mpl.colors.Normalize(vmin=vmin, vmax=vmax)
 ax.contourf(X[0, :, :], lat_depth3D.T, Z[0,:,:], zdir='y', levels=levels, cmap=newcmp2, offset= lat[960],
             norm=norm, vmin=vmin, vmax=vmax)
 
+#############################################################################
 # plotting land
 mask = np.isnan(lat_depth3D)                                # create a mask for the NaN values
 masked_array = np.where(mask, lat_depth3D, np.nan)          # change points with values to NaN
@@ -467,7 +473,7 @@ cbar.update_ticks()
 ```
 ![depth]({{ site.url }}/assets/img/post4/zonal_cross.png){: .center-image }
 
-<center>Figure 2: Zonal cross-section at the equator for the Pacific.</center>
+<center>Zonal cross-section at the equator for the Pacific.</center>
 
 # Visualizing one meridional cross-section
 We use the same main function with a few changes to do a zonal cross-section.
@@ -520,8 +526,10 @@ levels = 50                                 # set how many colors you want to pl
 # Contour Norms
 norm = mpl.colors.Normalize(vmin=vmin, vmax=vmax)
 #############################################################################
+# plotting meridional cross-section
 ax.contourf(lon_depth3D.T, Y[:, 0, :], Z[:, 0, :], zdir='x', offset=lon_ticks[0], levels=levels,
             cmap=newcmp2, norm=norm, vmin=vmin, vmax=vmax)
+#############################################################################
 
 # plotting land
 mask = np.isnan(lon_depth3D) # create a mask for the NaN values
@@ -578,7 +586,7 @@ cbar.update_ticks()
 
 ![depth]({{ site.url }}/assets/img/post4/merd_cross.png){: .center-image }
 
-<center>Figure 3: Meridional cross-section at 160E in the North Pacific.</center>
+<center>Meridional cross-section at 160E in the North Pacific.</center>
 
 # All cross-section plotted as cube
 
@@ -756,122 +764,23 @@ cbar.update_ticks()
 
 ![depth]({{ site.url }}/assets/img/post4/3D_cube.png){: .center-image }
 
-<center>Figure 4: North Pacific with a depth, zonal, and meridional cross-section.</center>
+<center>North Pacific with a depth, zonal, and meridional cross-section.</center>
 
-# Making an animation of zonal cross-sections
-Though the cross-sections are great, sometimes they are hard to understand and intuiatively place their location. For example, the meridional cut is tough to understand on its own, but once placed on a cube we can better imagine its location. 
+# Multiple cross-sections plotted at once
+As we showed in the previous section, you can plot multiple different cross-sections at once. You can also plot multiple of the same cross-sections at once. This is great for publications to show how the climate changes with depth, latitude, or longitude. For interpretability we take multiple zonal cross-sections along the California coast. This will show us how ENSO effect the California coast through warm anomalies and how it evolves as it moves up the coast. 
 
-It is also hard to interpret the extent of the impact something like ENSO has on the California coast through just one cross-section. We can plot multiple cross-sections on one plot to remedy this, which is great for publication, but I've found animating the cross-section has more impact. 
-
-You can make an animation from any of these cross-section. I decided to use the zonal cut just because its visualization is easy to understand as an animation. 
-
-First we create a function using the zonal cross-section code. We generalize it so that each time we call the function it will plot the cut based on a latitude index. 
+The set up is the same as previously but we updat the indices so that they reflect 30$^{\circ}$- 48$^{\circ}$N, 130$^{\circ}$-109$^{\circ}$W for the first 400ish meters. 
 
 ```python
-#############################################################################
-#############################################################################
-# Function will plot one zonal cross-section for a region
-# Input
-#         - title: string with tite for each figure
-#         - EOF: 3D array with data to be visualized
-#         - clip: float clip value that defines maximum and minimum for the colorbar
-#         - lat_ind: int with the latitude index that defines the cross-section
-# Output
-#         - fig: matplotlib figure object with the 3D figure
-# Important variables
-#         - lon_cut_start: int with starting longitude index
-#         - lon_cut_end: int with end longitude index
-#         - depth_cut_end: int with end depth index
-# Note: make sure all tick values are defined before calling this function. This is
-#       important for accurate labeling
-#############################################################################
-#############################################################################
-
-def plot_zonal_3D(title, EOF, clip, lat_ind):
-
-
-  # --- Setup Figure ---
-  fig = plt.figure(figsize=(12, 13))
-  fig.subplots_adjust(right = .95)  # Add this line
-
-  title_sz = 20
-  label_sz = title_sz-3
-
-  ax = fig.add_subplot(111, projection='3d')  # This is what defines the plot as 3D
-  vmin, vmax = -clip, clip                    # Change to scale better
-  levels = 50                                 # set how many colors you want to plot
-
-  # Contour Norms
-  norm = mpl.colors.Normalize(vmin=vmin, vmax=vmax)
-
-  #############################################################################
-  # plotting land
-  surface3D = EOF[0, lat_cut_start:lat_cut_end,lon_cut_start:lon_cut_end]
-
-  mask = np.isnan(surface3D) # create a mask for the NaN values
-  masked_array = np.where(mask, surface3D, np.nan)          # change points with values to NaN
-  masked_array = np.where(~mask, masked_array, vmin) # change NaN points to values
-  _ = ax.contourf(X[:, :, 0], Y[:, :, 0], masked_array, zdir='z', offset=-depths[0], cmap = mpl.colors.ListedColormap(['black']) ) # plotting the land
-  # Contours
-  #############################################################################
-  # plotting the cross-section
-  lat_depth3D = EOF[:depth_cut_end , lat_ind, lon_cut_start:lon_cut_end] # define the cross-section from the cut and index
-
-  # plot the cross-section contour
-  C = ax.contourf(X[0, :, :], lat_depth3D.T, Z[0,:,:], zdir='y', levels=levels, cmap=newcmp2, offset= lat[lat_ind],
-              norm=norm, vmin=vmin, vmax=vmax)
-  #############################################################################
-  ax.grid(True)
-  ax.set_xticks(lon_ticks, labels=[format_longitude(int(l)) for l in lon_ticks], fontsize=label_sz, rotation = -65, ha = 'left')  # Requires format_longitude function to remove degree symbol
-  ax.set_yticks(lat_ticks, labels=[format_latitude(int(l)) for l in lat_ticks], fontsize=label_sz, rotation = 45, va = 'center')  # Requires format_latitude function to remove degree symbol
-  ax.set_zticks(-depth_ticks, labels=[f"{t:.0f}" for t in depth_ticks], fontsize=label_sz)
-  ax.tick_params(axis='x', pad=0, labelsize=label_sz)
-  ax.tick_params(axis='y', pad=6,  labelsize=label_sz)
-  ax.tick_params(axis='z', pad=7,  labelsize=label_sz)
-
-  ax.set_xlabel('Longitude', fontsize=label_sz, labelpad=47)
-  ax.set_ylabel('Latitude', fontsize=label_sz, labelpad=16)
-  ax.set_zlabel('Depth [m]', fontsize=label_sz, labelpad=14, rotation=0)
-  ax.set_title(title, fontsize=title_sz)
-
-  # Set limits
-  ax.set_xlim(lon_ticks[0], lon_ticks[-1])
-  ax.set_ylim(lat_ticks[0], lat_ticks[-1])
-  ax.set_zlim(-depth_ticks[-1], 0)
-
-  #############################################################################
-  ax.set_box_aspect((1, 1, 1))
-
-  # view from above to make sure plot matches
-  ax.view_init(elev=40, azim=-150, vertical_axis='z')
-  #############################################################################
-  # the colorbar for the EOF data
-  sm = mpl.cm.ScalarMappable(norm=norm, cmap=newcmp2)
-  sm.set_array([])
-
-  cbar = fig.colorbar(sm, ax=ax, format = mpl.ticker.ScalarFormatter(useMathText=True), norm = norm, fraction=0.03, pad = .05)
-  cbar.ax.yaxis.get_offset_text().set_fontsize(title_sz) # change exp size
-  cbar.ax.yaxis.OFFSETTEXTPAD = 11           # moving exponent so it doesnt overlap with top of colorbar
-  cbar.ax.yaxis.set_offset_position('left')  # setexponent so it is more left
-  cbar.ax.tick_params(labelsize=label_sz)    # set label size of ticks
-  cbar.formatter.set_powerlimits((0, 0))     # formatting scientific notation
-  cbar.update_ticks()
-  #############################################################################
-
-  return fig
-  ```
-
-  Then, like before, we set up the regional cut
-
-  ```python
-# Set up cube for the North Pacific
 lat_cut_start = 1320   # index for 30 N
 lat_cut_end = 1537     # index for 48 N
 lon_cut_start = 2760   # index for 130 W
 lon_cut_end = 3013     # index for 109 W
 depth_cut_end = 30     # index for 400
+```
 
-# Defining the range and position of each tick for labeling
+We also update our tick labels and meshgrid:
+```python
 # last number changes the interval
 lon_ticks   = np.arange(lon[lon_cut_start], lon[lon_cut_end], 3)
 lat_ticks   = np.arange(lat[lat_cut_start], lat[lat_cut_end], 3)
@@ -881,63 +790,99 @@ depth_ticks = np.arange(0, depths[depth_cut_end], 100) # if plotting the first 1
 X, Y, Z = np.meshgrid(lon[lon_cut_start:lon_cut_end], lat[lat_cut_start:lat_cut_end], -depths[0:depth_cut_end])
 ```
 
-iteratively call the function for different latitude indices and save the figure as a PNG.
+Most importantly we define the latitude indices of the zonal cuts we wish to visualize. I created a simple array that contains the indices for every third degree from 30$^{\circ}$- 48$^{\circ}$N.
+```python
+lat_indices = np.arange(lat_cut_start, lat_cut_end, 12*3)
+```
+
+The rest of the figure creation is basically the same as the previous zonal cross-section creation with one key difference, we iterate through the array containing the latitude indices to plot the contours along the land. 
 
 ```python
-# create cross-section figures and save as PNG
-clip = 0.00009
-title = 'EOF 1'
-data  = EOF1
-lat_indices = np.arange(lat_cut_start, lat_cut_end, 6)
-pic_directory = data_directory
+# plotting the multiple cross-section
 for i, lat_ind in enumerate(lat_indices):
-    fig = plot_zonal_3D(title, data, clip, lat_ind)
-    fn     = 'EOF1_Zonal_Cross_Section' + str(i) + '.png'
-    fn     = os.path.join(pic_directory, fn)
-    plt.savefig(fn, dpi=300, bbox_inches='tight')
-    plt.close(fig)
-  ```
-
-  I take the PNGs
-```python
-# create GiF
-import imageio
-from PIL import Image
-import glob
-
-gif_path = data_directory # set GIF path
-frame_files = []
-# call all cross-section figures saved
-for i in range(len(lat_indices)):
-  fn     = 'EOF1_Zonal_Cross_Section' + str(i) + '.png'
-  fn     = os.path.join(data_directory, fn)
-  frame_files.append(fn)
+    lat_depth3D = EOF1[:depth_cut_end , lat_ind, lon_cut_start:lon_cut_end] # define the cross-section from the cut and index
+    
+    # plot the cross-section contour
+    C = ax.contourf(X[0, :, :], lat_depth3D.T, Z[0,:,:], zdir='y', levels=levels, cmap=newcmp2, offset= lat[lat_ind],
+              norm=norm, vmin=vmin, vmax=vmax)
 ```
-and create a a GIF.
-```python
-output_path = os.path.join(gif_path, f'EOF1_animation.gif')
+ altogether the code is:
 
-frames = [Image.open(frame).convert('RGB') for frame in frame_files] # put all figs together
-# save figs
-frames[0].save(
-    output_path,
-    save_all=True,
-    append_images=frames[1:],
-    duration=200,
-    loop=0,
-    optimize=False,  # Don't compress
-    quality=500  # Maximum quality
-)
+``` python
+ # --- Setup Figure ---
+fig = plt.figure(figsize=(11, 13))
+fig.subplots_adjust(right = .95)  
 
+title_sz = 20
+label_sz = title_sz-3
+
+ax = fig.add_subplot(111, projection='3d')  # This is what defines the plot as 3D
+
+clip = 0.00009                              # clip value
+title = 'EOF 1'
+
+vmin, vmax = -clip, clip                    # Change to scale better
+levels = 50                                 # set how many colors you want to plot
+
+# Contour Norms
+norm = mpl.colors.Normalize(vmin=vmin, vmax=vmax)
+
+#############################################################################
+# plotting land
+surface3D = EOF1[0, lat_cut_start:lat_cut_end,lon_cut_start:lon_cut_end]
+
+mask = np.isnan(surface3D) # create a mask for the NaN values
+masked_array = np.where(mask, surface3D, np.nan)          # change points with values to NaN
+masked_array = np.where(~mask, masked_array, vmin) # change NaN points to values
+_ = ax.contourf(X[:, :, 0], Y[:, :, 0], masked_array, zdir='z', offset=-depths[0], cmap = mpl.colors.ListedColormap(['black']) ) # plotting the land
+# Contours
+#############################################################################
+# plotting the multiple cross-section
+for i, lat_ind in enumerate(lat_indices):
+    lat_depth3D = EOF1[:depth_cut_end , lat_ind, lon_cut_start:lon_cut_end] # define the cross-section from the cut and index
+    
+    # plot the cross-section contour
+    C = ax.contourf(X[0, :, :], lat_depth3D.T, Z[0,:,:], zdir='y', levels=levels, cmap=newcmp2, offset= lat[lat_ind],
+              norm=norm, vmin=vmin, vmax=vmax)
+#############################################################################
+ax.grid(True)
+ax.set_xticks(lon_ticks, labels=[format_longitude(int(l)) for l in lon_ticks], fontsize=label_sz, rotation = -65, ha = 'left')  # Requires format_longitude function to remove degree symbol
+ax.set_yticks(lat_ticks, labels=[format_latitude(int(l)) for l in lat_ticks], fontsize=label_sz, rotation = 45, va = 'center')  # Requires format_latitude function to remove degree symbol
+ax.set_zticks(-depth_ticks, labels=[f"{t:.0f}" for t in depth_ticks], fontsize=label_sz)
+ax.tick_params(axis='x', pad=0, labelsize=label_sz)
+ax.tick_params(axis='y', pad=6,  labelsize=label_sz)
+ax.tick_params(axis='z', pad=7,  labelsize=label_sz)
+
+ax.set_xlabel('Longitude', fontsize=label_sz, labelpad=47)
+ax.set_ylabel('Latitude', fontsize=label_sz, labelpad=16)
+ax.set_zlabel('Depth [m]', fontsize=label_sz, labelpad=14, rotation=0)
+ax.set_title(title, fontsize=title_sz)
+
+# Set limits
+ax.set_xlim(lon_ticks[0], lon_ticks[-1])
+ax.set_ylim(lat_ticks[0], lat_ticks[-1])
+ax.set_zlim(-depth_ticks[-1], 0)
+
+#############################################################################
+ax.set_box_aspect((1, 1, 1))
+
+# view from above to make sure plot matches
+ax.view_init(elev=40, azim=-150, vertical_axis='z')
+#############################################################################
+# the colorbar for the EOF data
+sm = mpl.cm.ScalarMappable(norm=norm, cmap=newcmp2)
+sm.set_array([])
+
+cbar = fig.colorbar(sm, ax=ax, format = mpl.ticker.ScalarFormatter(useMathText=True), norm = norm, fraction=0.03, pad = .05)
+cbar.ax.yaxis.get_offset_text().set_fontsize(title_sz) # change exp size
+cbar.ax.yaxis.OFFSETTEXTPAD = 11           # moving exponent so it doesnt overlap with top of colorbar
+cbar.ax.yaxis.set_offset_position('left')  # setexponent so it is more left
+cbar.ax.tick_params(labelsize=label_sz)    # set label size of ticks
+cbar.formatter.set_powerlimits((0, 0))     # formatting scientific notation
+cbar.update_ticks()
 ```
-Lastly, don't forget to delete your PNG files!
+![multi zonal]({{ site.url }}/assets/img/3D_viz/multi_zonal_EOF1.png){: .center-image }
 
-```python
-# Delete the PNG files
-for file in frame_files:
-    os.remove(file)
+<center>Multiple zonal cross-sections for the Cali coast.</center>
 
-print(f"{output_path} created!")
-```
-This animation shows multiple zonal cross-sections going up the California coast for EOF 1. Using this you can observe  how ENSO cases warm anomalies on the California coast and how changes as it moves north.
-<img src="https://raw.githubusercontent.com/dlafarga/3D-Visualization-Tutorial-using-GLORYS/main/EOF1_animation.gif" width="80%">
+The next tutorial will use the code from this tutorial to create functions to produce an animation for each cross-section. 
