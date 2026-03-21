@@ -4,7 +4,7 @@ title: "A tutorial for visualizing climate data in 3D"
 author: "Dani Lafarga"
 categories: journal
 tags: [documentation,sample]
-image: EOF1_animation.gif
+image: /post4/3D_cube.png
 ---
 
 # Motivation
@@ -12,10 +12,10 @@ My previous 3D visualizations used Plotly, which was convenient and interactive,
 
 Once I started working with larger data, I found I was only able to plot one altitude layer of high-resolution data before crashing. This is when I turned to Python's Matplotlib library and its 3D projection. It took a lot less memory to create a figure, and it generated figures faster. Though I lost out on the interactive aspect (rotating, zooming in and out, etc.) I was still able to perform these tasks manually. 
 
-The following code is a tutorial for how to is used to visualize 3D climate data using Matplotlib 3D projections. As an example, I use the first empirical orthogonal function (EOF) computed from the high-resolution Global Ocean Physics Reanalysis (GLORYS) output for all latitude-longitude-depth dimensions (3D) at once. The complete calculation for the GLORYS 3D EOFs can be found at [this repository](https://github.com/dlafarga/PIM-for-Computing-3D-EOFs). The repository for this full code is found at [this Github](https://github.com/dlafarga/3D-Visualization-Tutorial-using-GLORYS).
+The following code is a tutorial for how to visualize 3D climate data using Matplotlib 3D projections. As an example, I use the first empirical orthogonal function (EOF) computed from the high-resolution Global Ocean Physics Reanalysis (GLORYS) output for all latitude-longitude-depth dimensions (3D) at once. The complete calculation for the GLORYS 3D EOFs can be found at [this repository](https://github.com/dlafarga/PIM-for-Computing-3D-EOFs). The repository for this full code is found at [this Github](https://github.com/dlafarga/3D-Visualization-Tutorial-using-GLORYS).
 
 # Data and EOF method
-Heres some of the nitty gritty info for the example data used in this visualization. TLDR: we are plotting the first EOF (a spatial pattern) computed from large ocean temperature data (49 GB). You might recognize ENSO in the visualization, and if you don't know what that is [NOAA has a great breakdown](https://oceanservice.noaa.gov/facts/ninonina.html). Just look out for a warm eastern tropical Pacific and cold western tropical Pacific. 
+Here's some of the nitty-gritty info for the example data used in this visualization. TLDR: we are plotting the first EOF (a spatial pattern) computed from large ocean temperature data (49 GB). You might recognize ENSO in the visualization, and if you don't know what that is [NOAA has a great breakdown](https://oceanservice.noaa.gov/facts/ninonina.html). Just look out for a warm eastern tropical Pacific and cold western tropical Pacific. 
 
 The ocean temperature in this study is from the global ocean physics reanalysis (GLORYS), a high-resolution  ($1/12^{\circ}$ by $1/12^{\circ}$) data assimilative global ocean simulation available from the Copernicus Marine Environment Monitoring Service. It has a spatial resolution of $1/12^{\circ}$ latitude by $1/12^{\circ}$ longitude with 50 depth layers covering the entire global ocean from $80^{\circ}$S to $90^{\circ}$N and $180^{\circ}$E to 180$^{\circ}$W, extending from the ocean surface to 5,727 meters.
 
@@ -32,7 +32,7 @@ The ocean temperature in this study is from the global ocean physics reanalysis 
 | 2225.08 | 2533.34 | 2865.70 | 3220.82 | 3597.03 |
 | 3992.48 | 4405.22 | 4833.29 | 5274.78 | 5727.92 |
 
-The resulting EOFs are calculated for all dimensions (i.e. 3D EOFs) using a December-January-February (DJF) boreal winter mean of GLORYS ocean temperature data from 1993/1994 to 2020/2021. We use the [temporal covariance method](https://dlafarga.github.io/journal/Covarianceintime.html). To further consider computational memory cost, the matrix multiplication required for calculating temporal covariance and 3D EOFs are performed using a partitioned approach. For temporal covariance, partitioned segments of the transposed anomaly matrix are sequentially read in and multiplied by corresponding partitioned segments of the anomaly matrix until the full multiplication is complete. Similarly, 3D EOFs are calculated by multiplying partitioned segments of the anomaly matrix with the eigenvectors of the temporal covariance matrix.
+The resulting EOFs are calculated for all dimensions (i.e., 3D EOFs) using a December-January-February (DJF) boreal winter mean of GLORYS ocean temperature data from 1993/1994 to 2020/2021. We use the [temporal covariance method](https://dlafarga.github.io/journal/Covarianceintime.html). To further consider computational memory cost, the matrix multiplication required for calculating temporal covariance and 3D EOFs are performed using a partitioned approach. For temporal covariance, partitioned segments of the transposed anomaly matrix are sequentially read in and multiplied by corresponding partitioned segments of the anomaly matrix until the full multiplication is complete. Similarly, 3D EOFs are calculated by multiplying partitioned segments of the anomaly matrix with the eigenvectors of the temporal covariance matrix.
 
 # Visualization setup
 
