@@ -1,6 +1,6 @@
 ---
 layout: post
-title: "A tutorial for 3D visualization of high-resolution climate data"
+title: "3D visualization of high-resolution climate data"
 author: "Dani Lafarga"
 categories: journal
 tags: [documentation,sample]

@@ -1,6 +1,6 @@
 ---
 layout: post
-title: "A tutorial for a 3D animation of regional cross-sections"
+title: "3D animation of regional cross-sections for high-resolution climate data"
 author: "Dani Lafarga"
 categories: journal
 tags: [documentation,sample]
@@ -225,7 +225,7 @@ There are a few things that we keep seperate from the function so that it is eas
 - Setting up the bounds and total color bins for the colorbar
 - Creating the title
 
-# Depth cross-section animation
+
 
 # Zonal cross-section animation
 Lets start with one of my favorite cross-sections, the zonal cross-section. This cut will tell us how the climate changes with latitude. 
@@ -396,4 +396,6 @@ print(f"{output_path} created!")
 ```
 This animation shows multiple zonal cross-sections going up the California coast for EOF 1. Using this you can observe  how ENSO cases warm anomalies on the California coast and how changes as it moves north.
 
-<img src="https://raw.githubusercontent.com/dlafarga/3D-Visualization-Tutorial-using-GLORYS/main/EOF 1_zonal_animation.gif" width="80%">
+<img src="https://raw.githubusercontent.com/dlafarga/Modern-technology-for-climate-data-and-analysis/main/GLORYS%20figures/EOF%201_zonal_animation.gif" width="80%">
+
+# Depth cross-section animation

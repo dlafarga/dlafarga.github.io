@@ -1,6 +1,6 @@
 ---
 layout: post
-title: "Computing 3D EOFs Using Covariance in Time and Singular Value Decomposition in Python"
+title: "Computing 3D EOFs from NASA OGCM Using Covariance in Time and Singular Value Decomposition in Python"
 author: "Dani Lafarga"
 categories: journal
 tags: [documentation,sample]
@@ -10,6 +10,10 @@ image: EOF_Jan_mode_1.gif
 
 ## Motivation
 Existing oceanic studies on either data reconstruction or dynamics often used 2-dimensional  empirical orthogonal functions (EOF) for sea surface temperature (SST) and for deep layers. However, large-scale oceanic dynamics, such as equatorial ocean upwelling and arctic ocean ventilation, implies the existence of strong covariance among the temperatures and other parameters of different layers. These ocean dynamics are not best represented in the isolated 2-dimensional calculations  layer-by-layer, while  the 3-dimensional EOFs have a clear advantage. 
+
+![3D OGCM]({{ site.url }}/assets/img/post1/Jan_clim.png){: .center-image }
+
+<center> Multiple depths plotted for January climatology from OGCM.</center>
 
 For the purpose of this example we will be using NASA JPL ocean general circulation model (OGCM) on a 1 by 1 degree grid to accomplish our goal of quatifying significant deeper ocean dynamics by performing a 3D calculation. Although the SVD method could be applied here it is not ideal for data with higher resolution. We propose a method that will be applicable to most datasets as a way of making such a goal accessible and accommodating. Nevertheless SVD is a powerfull tool and will be used in tandem with temporal covariance to verify these results. To download the full code to compute 3D EOFs see [this](https://github.com/dlafarga/calc_3D_EOFs) github repository. 
 
