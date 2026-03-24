@@ -419,7 +419,8 @@ print(f"{output_path} created!")
 ```
 This animation shows multiple zonal cross-sections going up the California coast for EOF 1. Using this you can observe  how ENSO cases warm anomalies on the California coast and how changes as it moves north.
 
-<img src="https://raw.githubusercontent.com/dlafarga/Modern-technology-for-climate-data-and-analysis/main/GLORYS%20figures/EOF%201_zonal_animation.gif" width="80%">
+![Zonal anim]({{ site.url }}/assets/img/3D_viz/EOF 1_zonal_animation.gif){: .center-image }
+<center>Zonal cross-sections on the Calfornia coast.</center>
 
 # Depth cross-section animation
 The depth animation set up will go in a similar way, but this time we will be using the North Pacific and not just the California coast. 
@@ -592,7 +593,8 @@ print(f"{output_path} created!")
 
 The resulting gif shows multiple depth layers in the North Pacific from the surface to 400 meters. It is able to capture how ENSO evolves with depth. 
 
-<img src="https://raw.githubusercontent.com/dlafarga/Modern-technology-for-climate-data-and-analysis/main/GLORYS%20figures/EOF%201_depth_animation.gif" width="80%">
+![Depth anim]({{ site.url }}/assets/img/3D_viz/EOF 1_depth_animation.gif){: .center-image }
+<center>Depth cross-sections in the North Pacific.</center>
 
 # Meridional cross-section
 This cross section I feel is the hardest to interpret on its own, and benifits quite a bit from an animation. We will use a large portion of the Pacific for this example to capture a lot of ENSO's extent. 
@@ -776,4 +778,5 @@ print(f"{output_path} created!")
 
 The resulting animation shows the cold western tropical Pacific and warm eastern tropical Pacific halves of ENSO.
 
-<img src="https://raw.githubusercontent.com/dlafarga/Modern-technology-for-climate-data-and-analysis/main/GLORYS%20figures/EOF%201_Meridional_animation.gif" width="80%">
+![Lon anim]({{ site.url }}/assets/img/3D_viz/EOF 1_Meridional_animation.gif){: .center-image }
+<center>Meridional cross-sections in the North Pacific.</center>
