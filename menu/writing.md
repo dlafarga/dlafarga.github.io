@@ -1,6 +1,7 @@
 ---
 layout: page
-title: Climate Research Projects
+title: Climate visualization and analysis tools
+
 ---
 <ul class="posts">
   {% for post in site.posts %}
