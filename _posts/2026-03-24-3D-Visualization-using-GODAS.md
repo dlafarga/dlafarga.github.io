@@ -175,10 +175,10 @@ These values can be changed to any region — it is simply a matter of knowing w
 The core plotting call for the depth cross-section is:
 
 ```python
-ax.contourf(X[:,:,0], Y[:,:,0], data, zdir='z', offset=-depths[0], levels=levels, cmap=newcmp2, norm=norm, vmin=vmin, vmax=vmax)
+ax.contourf(X[:,:,0], Y[:,:,0], data, zdir='z', offset=-depths[0], 
+levels=levels, cmap=newcmp2, norm=norm, extend = 'both')
 ```
 
-<br>
 
 **X** and **Y** are 3D arrays with longitude, latitude, and depth values (in that order) created previously from `meshgrid`.
 
@@ -186,7 +186,6 @@ Since we are plotting on the Z axis, the depth value remains constant for every 
 
 Note: The **X** and **Y** values are the same for every depth, so any depth index can be used (e.g., X$[:,:,1]$).
 
-<br>
 
 The **data** argument is a 2D (lat, lon) array containing the depth cross-section. It is obtained by indexing the **temp** array at the specified depth and region. For the surface, we define **data** as:
 
@@ -196,23 +195,22 @@ data = temp[0, lat_cut_start:lat_cut_end, lon_cut_start:lon_cut_end]
 
 The **data** array is always passed as the argument for the dimension that is held constant. In this case, since depth is constant, **data** is passed as the third argument.
 
-<br>
 
 The **zdir** argument specifies the direction in which the cross-section will be plotted. The **offset** should be set to a value along that same direction. In our example, since **zdir = 'z'** corresponds to depth, we set **offset** to the depth value at the desired layer.
 
 Note: We define the surface as 0. Anything above the surface is positive and anything below is negative. Since depth values increase going deeper, we apply a negative sign to depth values when plotting.
 
-<br>
+The last four arguments control the colorbar by setting the: values for the colormap (levels), the colormap (cmap), the normalization mapping (norm), and setting all values past the colorbar region to the maximum/minimum color (extend).
 
-The last four arguments control the colorbar, setting the colormap, the normalization mapping, and the lower and upper limits of the colorbar, respectively.
-
-Each function can be broken down into 6 parts:
+Now we build our complete function. Each function can be broken down into 6 parts:
 - Figure object creation and set up
 - Land plotting for the base map
 - Cross-section plotting (which also includes land masking for the cross-section)
 - Axis labeling and formatting
 - 3D view setting
 - Colorbar labeling and formatting
+
+Comments have been added to the code along with lines of '#' to show the division between each section in the function. 
 
 ```python
 
@@ -256,8 +254,8 @@ def plot_depth_3D(title, data, vmin, vmax, levels, depth_ind):
     depth3D = data[depth_ind, lat_cut_start:lat_cut_end,lon_cut_start:lon_cut_end]      # depth cross-section at index
 
     # plot the depth cross-section
-    cs2 = ax.contourf(X[:, :, 0], Y[:, :, 0], depth3D, levels=fixed_levels, zdir='z', offset=-depths[depth_ind],
-                       cmap=newcmp2, norm=norm, extend = 'both')
+    cs2 = ax.contourf(X[:, :, 0], Y[:, :, 0], depth3D, zdir='z', offset=-depths[depth_ind],
+                        levels=fixed_levels, cmap=newcmp2, norm=norm, extend = 'both')
     #############################################################################
     # plotting land of cross-section as black
     mask = np.isnan(depth3D)                                                 # create a mask for the NaN values
@@ -435,5 +433,188 @@ print(f"{output_path} created!")
 
 The resulting GIF steps through each depth layer from the surface down to approximately 500 meters, giving a clear picture of how ocean temperature varies with depth across the globe.
 
-![Depth anim]({{ site.url }}/assets/img/3D_viz/GODAS January 2025_zonal_animation.gif){: .center-image }
+![Depth anim]({{ site.url }}/assets/img/3D_viz/GODAS January 2025_depth_animation.gif){: .center-image }
 <center>Global depth cross-sections for January 2025.</center>
+
+# Zonal Cross-Section
+The zonal cross-section is built in a similar way to the previous cross-section.
+
+```python
+#############################################################################
+#############################################################################
+# Function will plot one zonal cross-section for a region
+# Input
+#         - title: string with tite for each figure
+#         - data: 3D array with data to be visualized
+#         - vmin, vmax: float clip value that defines maximum and minimum for the colorbar
+#         - lat_ind: int with the latitude index that defines the cross-section
+#         - levels: int that sets how many colors you want to plot
+# Output
+#         - fig: matplotlib figure object with the 3D figure
+# Important variables
+#         - lon_cut_start: int with starting longitude index
+#         - lon_cut_end: int with end longitude index
+#         - depth_cut_end: int with end depth index
+# Note: make sure all tick values are defined before calling this function. This is
+#       important for accurate labeling
+#############################################################################
+#############################################################################
+
+def plot_zonal_3D(title, data, vmin, vmax, lat_ind, levels):
+
+    # --- Setup Figure ---
+    fig = plt.figure(figsize=(12, 13))
+    fig.subplots_adjust(right = .95)  # Add this line
+    
+    title_sz = 20
+    label_sz = title_sz-3
+    
+    ax = fig.add_subplot(111, projection='3d')       # This is what defines the plot as 3D
+    
+    # Contour Norms
+    fixed_levels = np.linspace(vmin, vmax, levels)   # the colorbar ticks
+    norm = mpl.colors.Normalize(vmin=vmin, vmax=vmax)
+    
+    # create grid for each lat, lon, and depth variable
+    X, Y, Z = np.meshgrid(lon[lon_cut_start:lon_cut_end], lat[lat_cut_start:lat_cut_end], -depths[0:depth_cut_end])
+    
+    #############################################################################
+    # plotting land for surface 
+    surface3D = data[0, lat_cut_start:lat_cut_end,lon_cut_start:lon_cut_end]
+    
+    mask = np.isnan(surface3D) # create a mask for the NaN values
+    masked_array = np.where(mask, surface3D, np.nan)          # change points with values to NaN
+    masked_array = np.where(~mask, masked_array, vmin)        # change NaN points to values
+    _ = ax.contourf(X[:, :, 0], Y[:, :, 0], masked_array, zdir='z', offset=-depths[0], cmap = mpl.colors.ListedColormap(['black']) ) # plotting the land
+    # Contours
+    #############################################################################
+    # plotting the cross-section
+    lat_depth3D = data[:depth_cut_end , lat_ind, lon_cut_start:lon_cut_end] # define the cross-section from the cut and index
+    
+    # plot the cross-section contour
+    cs2 = ax.contourf(X[0, :, :], lat_depth3D.T, Z[0,:,:], zdir='y', levels=fixed_levels, cmap=newcmp2, offset= lat[lat_ind],
+               norm = norm, extend = 'both')
+    #############################################################################
+    # plotting land for cross-section
+    mask = np.isnan(lat_depth3D)                                # create a mask for the NaN values
+    masked_array = np.where(mask, lat_depth3D, np.nan)          # change points with values to NaN
+    masked_array = np.where(~mask, masked_array, vmin)          # change NaN points to values
+    _ = ax.contourf(X[0, :, :], masked_array.T, Z[0,:,:], zdir='y', offset=lat[lat_ind], cmap = mpl.colors.ListedColormap(['black']) ) # plotting the land
+
+    #############################################################################
+    ax.grid(True)
+    ax.set_xticks(lon_ticks, labels=[format_longitude(int(l)) for l in lon_ticks], fontsize=label_sz, rotation = -65, ha = 'left')  # Requires format_longitude function to remove degree symbol
+    ax.set_yticks(lat_ticks, labels=[format_latitude(int(l)) for l in lat_ticks], fontsize=label_sz, rotation = 45, va = 'center')  # Requires format_latitude function to remove degree symbol
+    ax.set_zticks(-depth_ticks, labels=[f"{t:.0f}" for t in depth_ticks], fontsize=label_sz)
+    ax.tick_params(axis='x', pad=0, labelsize=label_sz)
+    ax.tick_params(axis='y', pad=6,  labelsize=label_sz)
+    ax.tick_params(axis='z', pad=7,  labelsize=label_sz)
+    
+    ax.set_xlabel('Longitude', fontsize=label_sz, labelpad=47)
+    ax.set_ylabel('Latitude', fontsize=label_sz, labelpad=16)
+    ax.set_zlabel('Depth [m]', fontsize=label_sz, labelpad=14, rotation=0)
+    ax.set_title(title, fontsize=title_sz)
+    
+    # Set limits
+    ax.set_xlim(lon_ticks[0], lon_ticks[-1])
+    ax.set_ylim(lat_ticks[0], lat_ticks[-1])
+    ax.set_zlim(-depth_ticks[-1], 0)
+    
+    #############################################################################
+    ax.set_box_aspect((1, 1, 1))
+    
+    # view from above to make sure plot matches
+    ax.view_init(elev=40, azim=-150, vertical_axis='z')
+    #############################################################################
+    #############################################################################
+    # the colorbar for the data
+    cbar = fig.colorbar(cs2, fraction=0.03, pad = 0, extendfrac=0)
+    cbar.ax.set_title("K", fontsize = label_sz)
+    cbar.ax.tick_params(labelsize=label_sz)    # set label size of ticks
+    cbar.update_ticks()
+    #############################################################################
+    
+    return fig
+```
+
+Let's skip calling the function once and instead create the GIF. Unlike the high-resolution GLORYS data, GODAS has a coarse resolution. calling this function for a small region like the California coast looks pixelated. 
+
+![Zonal Cali]({{ site.url }}/assets/img/post5/GODAS January 2023_animation.gif){: .center-image }
+<center>Zonal cross-sections along California coast for January 2025.</center>
+
+Instead, we can use a larger region which does not require much detail and is perfect for this type of dataset. We use the North Pacific as an example:
+
+```python
+# -- Set up for function call --
+######################################
+# Set up for the North Pacific
+lat_cut_start = 134    # index for 30 S
+lat_cut_end   = 405    # index for 60 N
+lon_cut_start = 160    # index for 160 E
+lon_cut_end   = 301    # index for 60 W
+depth_cut_end = 27     # index for 459 meters
+
+# Defining the range and position of each tick for labeling
+# last number changes the interval
+lon_ticks   = np.arange(lon[lon_cut_start], lon[lon_cut_end], 20)
+lat_ticks   = np.round(np.arange(lat[lat_cut_start], lat[lat_cut_end], 10)) # round these because the scale is 1/3 and we want to round up
+depth_ticks = np.arange(0, depths[depth_cut_end], 100) # if plotting the first 100 meters change the last number to something =<25
+
+# Defining the latitudes to visualize
+lat_indices = np.arange(lat_cut_start, lat_cut_end, 3)
+
+# Set up for colorbar
+vmin, vmax = 270, 303 # Change to scale better
+colors     = 32       # set how many colors you want to plot
+
+# title for plot
+title = f'GODAS January {year}'
+
+# -- Create PNG -- #
+######################################
+pic_directory = os.getcwd()
+# create cross-section figures and save as PNG
+for i, lat_ind in enumerate(lat_indices):
+    fig = plot_zonal_3D(title, temp, vmin, vmax, lat_ind, colors)
+    fn     = 'Zonal_Cross_Section' + str(i) + '.png'
+    fn     = os.path.join(pic_directory, fn)
+    plt.savefig(fn, dpi=300, bbox_inches='tight')
+    plt.close(fig)
+
+# -- Create GiF --
+######################################
+import imageio
+from PIL import Image
+import glob
+
+gif_path = os.getcwd() # set GIF path
+frame_files = []
+# call all cross-section figures saved
+for i in range(len(lat_indices)):
+  fn     = 'Zonal_Cross_Section' + str(i) + '.png'
+  fn     = os.path.join(pic_directory, fn)
+  frame_files.append(fn)
+
+output_path = os.path.join(gif_path, f'{title}_animation.gif') # give gif a name based on title
+
+frames = [Image.open(frame).convert('RGB') for frame in frame_files] # put all figs together
+# save figs
+frames[0].save(
+    output_path,
+    save_all=True,
+    append_images=frames[1:],
+    duration=200,
+    loop=0,
+    optimize=False,  # Don't compress
+    quality=500  # Maximum quality
+)
+
+# Delete the PNG files
+for file in frame_files:
+    os.remove(file)
+
+print(f"{output_path} created!")
+```
+
+![Zonal anim]({{ site.url }}/assets/img/3D_viz/GODAS January 2025_zonal_animation.gif){: .center-image }
+<center>Zonal cross-sections in Pacific region for January 2025.</center>
