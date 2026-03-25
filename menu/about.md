@@ -10,7 +10,7 @@ title: About me
 
 <p>When I'm not coding or analyzing ocean temperatures, you'll find me twirling fire poi, rock climbing, at my piano, or crafting elaborate cosplay costumes. I believe the same creativity I use in life goes into building good algorithms.</p>
   
-<p> Feel free to explore my <a href="[url](https://dlafarga.github.io/menu/writing.html)">projects.</a> </p>
+<p> Feel free to explore my <a href="[url](https://dlafarga.github.io/menu/writing.html)">climate visualization and analysis tools.</a> </p>
 
 ---
 <br>
