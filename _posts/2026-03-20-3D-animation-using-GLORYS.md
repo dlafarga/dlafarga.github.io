@@ -10,7 +10,9 @@ image: /3D_viz/EOF 1_zonal_animation.gif
 # Motivation
 In the [previous tutorial](https://dlafarga.github.io/journal/3D-Visualization-Tutorial-using-GLORYS.html) I taught you how to create 3D visualizations for zonal, meridional, and depth cross-sections. Though the cross-sections are great, sometimes they are hard to understand and intuiatively place their location. For example, the meridional cut is tough to understand on its own:
 
+![Meridonal Cross]({{ site.url }}/assets/img/post4/merd_cross.png){: .center-image }
 
+<center>Meridional cross-section at 160E in the North Pacific. This is harder to place intuatively than the cube.</center>
 
 But if you visualize this cut with other cross-sections we can better interpret the figure
 
