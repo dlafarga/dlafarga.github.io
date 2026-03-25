@@ -588,7 +588,7 @@ cbar.update_ticks()
 
 <center>Meridional cross-section at 160E in the North Pacific.</center>
 
-# All cross-section plotted as cube
+# All cross-sections plotted as cube
 
 Here we put all cross-sections together to form a cube. To do this you just need to run each contour plot command in one go. The code is broken up so it will show each section.
 
